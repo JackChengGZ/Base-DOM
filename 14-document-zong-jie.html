@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+
+</body>
+<script type="application/javascript">
+    /*
+    * document 总结
+    *   1.文档写入
+    *       document.write()
+    *       document.open() document.close()
+    *   2.文档属性
+    *       title、documentElement(HTML标签)、body、forms、links
+    *   3.获取标签(查找元素)
+    *       getElementBy***()  querySelector()
+    *   4.文档事件
+    *       加载完成、各种鼠标、键盘、UI等事件
+    *   5.文档创建编辑
+    *       createElement、createAttribute...
+    *   6.文档样式的处理
+    *       样式类的操作、样式的属性
+    *
+    * */
+    window.onload=function(){
+        document.open();
+        document.write('<h1>你好</h1>');
+        document.close();
+    }
+</script>
+</html>

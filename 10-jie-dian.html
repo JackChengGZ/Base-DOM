@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <style type="text/css">
+        #msgBox{
+            width: 200px;
+            height: 200px;
+            border: 1px solid #ddd;
+            position: absolute;
+        }
+        #msgCloseBtn{
+            width: 50px;
+            height: 18px;
+            position: absolute;
+            right: 5px;
+            top: 5px;
+            border: 1px solid #000;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <ul id="list">
+        <li>1</li>
+        <li>2</li>
+        <li>3</li>
+        <li>4</li>
+        <li>5</li>
+    </ul>
+    
+    
+    <ul id="menu">
+
+    </ul>
+
+
+    <div id="msgBox">
+        <div id="msgCloseBtn">
+            关闭
+        </div>
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Beatae commodi similique totam voluptatibus. Architecto asperiores distinctio dolor eos et facilis fugiat laborum mollitia nesciunt nihil nisi, quae quis quod unde?
+    </div>
+</body>
+<script type="application/javascript">
+    /*
+    * .节点操作
+    *   1.一个HTML文档分为很多个节点。节点(Node)有不同的类型：
+    *       文档(document)节点:Document-HTMLDocument-document
+    *       元素(Element)节点:Element-HTMLElement-HTMLDivElement
+    *                                           -HTMLBodyElement
+    *                                           -...
+    *       文本节点、注释节点、属性节点、文档片段DocumentFragment等
+    *   2.节点与节点形成了层级结构。也就是文档节点树
+    *   3.节点对象的DOM类型是Node
+    *
+    *
+    * .节点对象Node(Node接口):Node里面就封装了一系列的属性，方法
+    *   1.Node接口是对节点的封装。继承自EventTarget。也就是说所有的Node节点对象都可以绑定事件
+    *   2.Node常用属性：
+    *           .nodeType
+    *               .标签=1，属性=2，文本=3，注释=8，文档=9
+    *           .nodeName
+    *               .标签=tagName,属性=属性名，文本=#text,文档=#document
+    *           .nodeValue
+    *               .文本节点返回文本值，属性节点返回属性内容，注释节点返回注释内容，其他都返回null
+    *           .textContent属性表示一个节点及其后代的文本内容(ie9+)
+    *           .innerText是一个表示一个节点及其后代的'渲染'文本内容的属性(ie6-8)
+    *   3.节点关系
+    *       .Node.childNodes(NodeList) 返回子节点，子节点会自动更新。
+    *       .Node.firstChild返回第一个子节点或者null
+    *       .Node.lastChild返回最后一个子节点或者null
+    *       .Node.nextSibling返回与该节点同级的下一个节点，如果没有返回null
+    *       .Node.previousSibling返回与该节点同级的上一个节点，如果没有返回null
+    *       .Node.parentNode 返回父节点
+    *       .Node.parentElement 返回父节点标签，如果不是标签返回null
+    *
+    * .节点层级和关系
+    *
+    *
+    * .节点的类型
+    *
+    *
+    * .节点操作(CRUD)
+    *    1.创建节点
+    *      .document.createElement(tagName)创建元素节点
+    *      .document.createSAttribute(name)创建并返回一个新的属性节点，可以通过nodeValue
+    *      设置属性节点值。(但是一般用setAttribute)
+    *      .document.createComment(data)创建注释节点。
+    *      .document.createTextNode创建一个新的文本节点
+    *      添加：Node.appendChild(child);
+    *           ParentNode.insertBefore(newEle,referenceEle);在referenceEle前面添加newEle
+    *   2.删除节点
+    *       Node.removeChild(child);删除，并且可以返回删除的这个节点
+    *   3.修改节点
+    *       Node.replaceChild(new,old);替换
+    *   4.遍历节点
+    *       Node.hasChildNodes();false/true
+    *       Node.cloneChild();克隆
+    *
+    * */
+    var ulList=document.getElementById('list');
+    console.log(ulList.childNodes);
+    console.log(ulList.childNodes.item(3));
+
+    //案例  json数据动态添加创建菜单
+//    (function(){
+//        var data=[
+//            {name:'首页',url:'/index.html',id:1},
+//            {name:'关于',url:'/about.html',id:2},
+//            {name:'产品',url:'/product.html',id:3},
+//            {name:'案例',url:'/usecase.html',id:4},
+//            {name:'联系',url:'/contact.html',id:5}
+//        ];
+//        window.onload=function(){
+//            loadMenu();//初始化菜单数据
+//
+//
+//        }
+////        第一种种操作会有频繁DOM操作
+////        function loadMenu(){
+////            var menu=document.getElementById('menu');
+////            //li a href
+////            for(var i=0;i<data.length;i++){
+////                var liEle=document.createElement('li');
+////                //第一种设置属性方法
+//////                liEle.setAttribute('id','menu'+data[i].id);//推荐使用
+////                //第二种设置属性方法  不推荐使用
+//////                var liIdAttrNode=document.createAttribute('id');
+//////                liIdAttrNode.nodeValue='menu'+data[i].id;
+//////                liEle.setAttributeNode(liIdAttrNode);
+////
+////                var menuLinkEle=document.createElement('a');
+////                menuLinkEle.setAttribute('href',data[i].url);
+//////                menuLinkEle.innerHTML=data[i].name;//通过这种方式也是可以的  优先
+////                if( menuLinkEle.innerText){//这里需要做一个兼容性
+////                    menuLinkEle.innerText=data[i].name;
+////                }else{
+////                    menuLinkEle.textContent=data[i].name;
+////                }
+////                //把a添加到li
+////                liEle.appendChild(menuLinkEle);
+////                //添加到ul
+////                menu.appendChild(liEle);
+////            }
+////        }
+//
+//
+//
+//
+//        第二种操作 减少DOM操作 优化
+        function loadMenu(){
+            var menu=document.getElementById('menu');
+//            var strArray=[];
+            //第三种方式
+            var str="";
+            for(var i=0;i<data.length;i++){
+                str+="<li id=menu"+data[i].id+">";
+                str+=    "<a href="+data[i].url+">"+data[i].name+"</a>";
+                str+="</li>";
+//                第一种
+//                menu.innerHTML+=str;//效率太低
+//                第二种
+//                strArray.push(str);
+            }
+//            menu.innerHTML=strArray.join("");
+            menu.innerHTML=str;
+        }
+
+//    })();
+
+
+    //案例 关闭消息框
+    (function(){
+        window.onload=function(){
+            var msgCloseBtn=document.getElementById('msgCloseBtn');
+            msgCloseBtn.onclick=function(){
+                this.parentNode.style.display='none';
+            }
+        }
+    })();
+</script>
+</html>

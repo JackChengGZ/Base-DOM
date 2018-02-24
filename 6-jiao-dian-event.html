@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <style type="text/css">
+        html,div,ul,li,input{
+            padding: 0;
+            margin: 0;
+        }
+        .wrap{
+            margin: 0 auto;
+            width: 300px;
+            height: 400px;
+            padding-top: 30px;
+        }
+        ul{
+            list-style: none;
+            border: 1px solid #ddd;
+            width: 202px;
+            display: none;
+            position: absolute;
+        }
+        ul li{
+            height: 25px;
+            line-height: 25px;
+            padding-left: 5px;
+        }
+        ul li:hover{
+            background: #eeeeee;
+            cursor: pointer;
+        }
+        input{
+            width:200px;
+            height: 25px;
+        }
+        
+    </style>
+</head>
+<body>
+    <input type="text" id="txt1"/>
+    <input type="text" id="txt2"/>
+    <input type="button" id="btn" value="点击获取焦点"/>
+    <input type="text" id="txt3" value="Jack"/>
+    <br/>
+    <br/>
+    <div class="wrap">
+        <input type="text" id="txtSearch" class="txt-search"/>
+        <ul class="list" id="tabList">
+            <li>Jack1</li>
+            <li>Jack2</li>
+            <li>Jack3</li>
+            <li>Jack4</li>
+            <li>Jack5</li>
+        </ul>
+    </div>
+
+</body>
+<script type="application/javascript">
+    /*
+    * 焦点事件
+    *   .获取焦点focus
+    *       当标签元素获得焦点的时候触发此事件
+    *       此事件不会冒泡，浏览器兼容性好
+    *   .失去焦点blur
+    *       当标签失去焦点时候触发。此事件不冒泡
+    *       兼容性比较好。
+    *   .获取焦点focusin,同focus但是会冒泡或者捕获
+    *   .失去焦点focusout,同blur,但是会冒泡或者捕获
+    *   .Element.focus()方法可以让标签元素获得焦点
+    *
+    * */
+    window.onload=function(){
+        //获得失去焦点
+        var txt1=document.getElementById('txt1');
+        txt1.onfocus=function(){
+            console.log('获得焦点');
+        }
+        txt1.onblur=function(){
+            console.log('失去焦点');
+        }
+        //设置文本框获得焦点
+        var btn=document.getElementById('btn');
+        btn.onclick=function(){
+            document.getElementById('txt2').focus();
+        }
+
+
+        //案例 实现文本框2不能为空
+        var txt2=document.getElementById('txt2');
+        txt2.onblur=function(){
+            if(!txt2.value){
+                //如果为空
+                txt2.focus();
+                txt2.style.borderColor='red';
+            }else{
+                txt2.style.borderColor='';
+            }
+        }
+
+        //案例 实现文本框的placeholder
+        var txt3=document.getElementById('txt3');
+        txt3.style.color='#ccc';
+        txt3.onfocus=function(){
+            if(txt3.value=='Jack'){
+                txt3.value='';
+                txt3.style.color='#000'
+            }
+        }
+        txt3.onblur=function(){
+            if(txt3.value==''){
+                txt3.style.color='#ccc';
+                txt3.value='Jack';
+            }
+        }
+
+        //案例 文本框的提示内容
+//        (function(window){})(window||{})
+        var txtSearch=document.getElementById('txtSearch');
+        var tabList=document.getElementById('tabList');
+        var liList=tabList.getElementsByTagName('li');
+        txtSearch.onfocus=function(){
+            tabList.style.display='block';
+        }
+        txtSearch.onblur=function(){
+            tabList.style.display='none';
+        }
+        //给所有的li绑定点击事件 在这里点击事件和失去焦点事件有个冲突 其中一种方法是定时器延迟
+        for(var i=0;i<liList.length;i++){
+//            liList[i].onclick=liClick;
+            liList[i].onmousedown=liClick;
+        }
+        function liClick(){
+            var txt=this.innerHTML;
+            txtSearch.value=txt;
+        }
+        //第二种方法采用onmousedown,主要是onmousedown会在失去焦点之前发生
+        //onmousedown->blur->onmouseup->onclick
+    }
+</script>
+</html>

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+    <p id="p1" class="tm">段落一</p>
+    <p id="p2" class="tm">段落二</p>
+    <p id="p3">段落三</p>
+    <div id="d1"></div>
+    <div id="d2" class="hello" data-text="Jack">
+        <span>你好</span>
+        <p>hello world</p>
+    </div>
+
+    <div class="c1">hll</div>
+    <p class="tm">fdsgdf</p>
+    <h3 id="tmd">dfhskgjfd</h3>
+</body>
+<script type="application/javascript">
+    /*
+        节点包括标签
+    * getElementById()
+    *   .回Element对象
+    *
+    * getElementsByTagName()
+    *   .返回一个HTMLCollection集合对象
+    *
+    * getElementsByName(name)
+    *   .返回一个NodeList集合
+    *
+    * getElementByClassName()
+    *
+    *
+    * querySelector(selectors)  ie8及以上
+    *   .回Element对象
+    *
+    * querySelectorAll(selectors)
+    *   .返回一个NodeList
+    * */
+    //1.getElementById()
+    var ele=document.getElementById('p2');
+    console.log(ele);
+    console.log(typeof ele);
+    console.dir(ele);
+    //ele->继承HTMLParagraphElement->继承HTMLElement(所有html标签基类的接口)->Element(所有元素的)->Node->
+    // EventTarget->Object->null
+    //接口：有自己规定的方法、属性。但必须有子类的给他实现
+    //类型：可以直接创建实例。比如：Number类型
+    var d1=document.getElementById('d1');
+    //d1->HTMLDivElement....
+    var d2=document.getElementById('dsjk');//null 一般函数没有具体的返回值就返回null
+
+
+    //解释Element元素对象(接口)
+    /*
+        元素：是所有标签元素的基础对象。封装了所欲标签元素的公共方法和属性
+        常用属性：
+        Element.attributes获得所有属性key-value集合
+        Element.className获得类名
+        Element.id获得元素id
+        Element.innerHTML获取元素内部包裹的HTML标签字符串
+        Element.tagName(只读)获取元素的标签名字符串返回的是一个大写的
+        常用方法：
+        Element.getAttribute(attrName)返回属性的字符串值
+        Element.removeAttribute(attrName);从指定元素中删除一个属性
+        Element.setAttribute(name,value);设置属性
+        Element.hasAttribute()检测属性是否存在
+        Element.getElementsByClassName()
+        Element.getElementsByTagName()
+    */
+    var d2=document.getElementById('d2');//HTMLDivElement  HTMLElement Element
+    console.log(d2.attributes);
+    console.log(d2.attributes[0]);
+    console.log(d2.attributes.item(0));
+    d2.setAttribute('data-text','cheng');
+    console.log(d2.getAttribute('class'));
+
+
+
+    //2.getElementsByTagName()：返回一个HTMLCollection集合对象
+    var Ps=document.getElementsByTagName('p');//类数组对象
+    //反回的是一个HTMLCollection集合对象
+    //Ps是HTMLCollection的实例，HTMLCollection->继承Object.prototype
+    console.dir(Ps);
+    /*
+    * HTMLCollection集合对象
+    * 属性：
+    *   length
+    * 方法：
+    *   item()：通过索引获取标签对象Element
+    *   namedItem()：通过name获取标签对象Element
+    *   例如：document.forms['myForm'];
+    *   document.forms.namedItem['myForm']
+    * 转数组：
+    *   Array.prototype.slice.call(HTMLCollection);
+    *
+    * */
+    var all=document.getElementsByTagName('*');//获取所有的页面标签
+
+
+    //3.querySelector(selectors):selectors根据css选择器字符串作为参数
+    var ele1=document.querySelector('.c1');
+    console.dir(ele1);
+
+    //4.querySelectorAll(selectors)：selectors根据多个css选择器字符串作为参数
+    var ptms=document.querySelectorAll('p.tm');
+    console.log(ptms);//NodeList接口的集合 原型式Object.prototype
+    ptms.forEach(function(elem,index){//forEach:1.数组元素 2.元素对应索引
+        console.log(index+" "+elem.innerHTML);
+    });
+    /*
+    * NodeList对象节点集合
+    * 属性：length
+    * 方法：NodeList.item()
+    * 注意：不要用for in这样会把length item访问到
+    * */
+
+
+</script>
+</html>

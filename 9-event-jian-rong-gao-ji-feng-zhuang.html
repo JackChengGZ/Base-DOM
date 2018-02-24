@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<input type="button" value="点击" id="btn"/>
+<ul class="list" id="list">
+    <li>Jack1</li>
+    <li>Jack2</li>
+    <li>Jack3</li>
+    <li>Jack4</li>
+    <li>Jack5</li>
+    <li>Jack6</li>
+    <li>Jack7</li>
+    <li>Jack8</li>
+    <li>Jack9</li>
+    <li>Jack10</li>
+    <li>Jack11</li>
+    <li>Jack12</li>
+    <li>Jack13</li>
+    <li>Jack14</li>
+    <li>Jack15</li>
+    <li>Jack16</li>
+    <li>Jack17</li>
+    <li>Jack18</li>
+    <li>Jack19</li>
+    <li>Jack20</li>
+</ul>
+</body>
+<script type="application/javascript">
+    /**
+     * 事件高级兼容封装
+     * 1.事件绑定封装
+     *  .标准浏览器：addEventListener(ie9+)
+     *  .IE浏览器：attachEvent
+     *  .标准浏览器支持捕获和冒泡
+     * 2.事件对象封装
+     *  .ie下获取事件对象，通过window.event
+     *  .标准浏览器通过事件处理程序的参数
+     *  .取消默认操作兼容
+     *  .取消事件冒泡兼容
+     * 3.文档加载完成封装
+     *  .ie通过监听document的readystatechange事件，根据document的readyState的值来
+     *   判断文档是否可进行交互访问
+     *  .标准浏览器可以通过DOMContentLoaded事件
+     *  .最后也可以使用window.onload
+     * 4.事件委托：主要是通过事件冒泡的原理
+     *  .当子标签非常多的时候，可以灵活运用事件冒泡或者捕获的特性来实现在父容器上绑定事件
+     *  让所有的子元素都享受同一个事件处理程序。
+     *  优势：动态添加的元素也可以享受此事件。较少的占用内存(更少的绑定了事件对象，提高了效率)
+     *
+     *
+     *
+     *
+     * */
+   //事件封装
+    (function(window){//用一个匿名函数封装，产生块级作用域，避免全局的污染
+        var EventUtil={
+            //第一个：封装绑定事件的兼容处理,(当然你也可以直接使用DOM0级别的on+'事件名')
+           // 1.给谁绑定  2.绑定事件类型  3.绑定事件处理程序  4.捕获冒泡
+            addEvent:function(element,type,handler,isCapture){
+                //标准浏览器
+                if(element.addEventListener){
+                    isCapture=isCapture?true:false;
+                    element.addEventListener(type,handler,isCapture);
+                //ie6-8
+                }else if(element.attachEvent){
+                    element.attachEvent('on'+type,function(){
+//                        window.event  因为这是在ie下，事件对象是window.event
+                        return handler.call(element,window.event);//函数掉用模式：this==window
+                        //所有的事件处理中 this==event.target||event.srcElement
+                    });
+                }else{
+                    element['on'+type]=handler;
+                }
+            },
+          //第二个：事件源对象event.target封装
+          //1.标准浏览器 2.IE6-8浏览器
+            getTarget:function(e){
+                return e.target||e.srcElement;
+            },
+          //第三个：事件对象event封装
+            getEvent:function(e){
+                return e||window.event
+            },
+            //第四个:阻止默认行为
+            preventDefault:function(){
+                if(event.preventDefault){
+                    event.preventDefault();
+                }else{
+                    event.returnValue=false;
+                }
+            },
+            //第五个：取消事件冒泡
+            stopPropagation:function(){
+                if(event.stopPropagation){
+                    event.stopPropagation();
+                }else{
+                    event.cancelBubble=true;
+                }
+            },
+            //第六个:移除事件
+            removeHandler:function(element,type,handler){
+                if(element.removeEventListener){
+                    element.removeEventListener(type,handler,false);
+                }else if(element.detachEvent){
+                    element.detachEvent("on"+type,element["e"+type]);
+                    element["e"+type]=null;
+                }else{
+                    element["on"+type]=null;
+                }
+            }
+
+        };
+        //很多情况下我们把上面定义的对象赋值给window的属性
+        window.EventUtil=EventUtil;
+
+    })(window||{});
+    //用法
+//    EventUtil.addEvent(element,'click',function(e){},false);
+
+    //测试
+    (function(){
+        window.onload=function(){
+            var btn=document.getElementById('btn');
+            window.EventUtil.addEvent(btn,'click',function(e){
+                alert(1);
+                console.log(e);
+                console.log(this);
+            })
+        }
+    })();
+
+
+    //事件委托案例
+//    list中的li个数是不确定的，可能动态添加减少
+//    (function(){
+//        window.onload=function(){
+//            //拿到所有的li 绑定点击事件
+//            var ulList=document.getElementById('list');
+//            var liList=ulList.getElementsByTagName('li');
+//            //这种方式会导致动态添加的无法绑定事件处理程序
+//            //另外li比较多的时候会绑定大量的绑定事件的信息
+////            for(var i=0;i<liList.length;i++){
+////                EventUtil.addEvent(liList[i],'click',function(e){
+////                    console.log(this.innerHTML);
+////                })
+////            }
+//            //解决上面的问题：利用冒泡
+//            //解决思路：子元素的事件委托父元素来进行注册和处理
+//            EventUtil.addEvent(ulList,'click',function(e){
+//                //子元素被点击的时候也会冒泡到父元素
+//                var target=EventUtil.getTarget(e);//获取事件源对象
+//                //如果点击了父容器自己。那就什么都不做
+//                if(target==ulList){
+//                    return;
+//                }
+//                console.log(target);
+//                console.log(target.innerHTML);
+//
+//            })
+//        }
+//    })();
+
+
+
+</script>
+</html>

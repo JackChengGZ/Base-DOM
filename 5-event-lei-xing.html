@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <style type="text/css">
+        .top{
+            height: 150px;
+            background: skyblue;
+        }
+        #nav{
+            width: 100%;
+            height: 100px;
+            margin: 0 auto;
+            background: seashell;
+            padding: 0;
+        }
+        #nav li{
+            box-sizing: border-box;
+            list-style: none;
+            float: left;
+            width: 25%;
+            border: 1px solid #000;
+            height: 80px;
+            line-height: 80px;
+            text-align: center;
+        }
+        .fixed{
+        /*//预先定义一个class*/
+            position: fixed;
+            top: 0;
+            left: 0;
+        }
+    </style>
+</head>
+<body>
+    <!--<hr/>-->
+    <!--<div></div>-->
+    <!--<input type="button" id="clickMe" value="点击我"/>-->
+    <!--<input type="button" id="btn" value="点击"/>-->
+    <div>
+        <div class="top">
+            可以卷进去的顶部
+        </div>
+        <ul id="nav">
+            <li>首页</li>
+            <li>联系</li>
+            <li>案例</li>
+            <li>招聘</li>
+        </ul>
+    </div>
+    <ul id="list">
+        <li>
+            <h1>1</h1>
+        </li>
+        <li>
+            <h1>2</h1>
+        </li>
+        <li>
+            <h1>3</h1>
+        </li>
+        <li>
+            <h1>4</h1>
+        </li>
+        <li>
+            <h1>5</h1>
+        </li>
+        <li>
+            <h1>6</h1>
+        </li>
+        <li>
+            <h1>7</h1>
+        </li>
+        <li>
+            <h1>8</h1>
+        </li>
+        <li>
+            <h1>9</h1>
+        </li>
+        <li>
+            <h1>10</h1>
+        </li>
+        <li>
+            <h1>11</h1>
+        </li>
+        <li>
+            <h1>12</h1>
+        </li>
+        <li>
+            <h1>13</h1>
+        </li>
+        <li>
+            <h1>14</h1>
+        </li>
+        <li>
+            <h1>15</h1>
+        </li>
+        <li>
+            <h1>16</h1>
+        </li>
+        <li>
+            <h1>17</h1>
+        </li>
+        <li>
+            <h1>18</h1>
+        </li>
+        <li>
+            <h1>19</h1>
+        </li>
+        <li>
+            <h1>20</h1>
+        </li>
+        <li>
+            <h1>21</h1>
+        </li>
+        <li>
+            <h1>22</h1>
+        </li>
+        <li>
+            <h1>23</h1>
+        </li>
+        <li>
+            <h1>24</h1>
+        </li>
+        <li>
+            <h1>25</h1>
+        </li>
+        <li>
+            <h1>26</h1>
+        </li>
+        <li>
+            <h1>27</h1>
+        </li>
+        <li>
+            <h1>28</h1>
+        </li>
+        <li>
+            <h1>29</h1>
+        </li>
+        <li>
+            <h1>30</h1>
+        </li>
+        <li>
+            <h1>31</h1>
+        </li>
+        <li>
+            <h1>32</h1>
+        </li>
+        <li>
+            <h1>33</h1>
+        </li>
+        <li>
+            <h1>34</h1>
+        </li>
+        <li>
+            <h1>35</h1>
+        </li>
+        <li>
+            <h1>36</h1>
+        </li>
+        <li>
+            <h1>37</h1>
+        </li>
+        <li>
+            <h1>38</h1>
+        </li>
+        <li>
+            <h1>39</h1>
+        </li>
+        <li>
+            <h1>40</h1>
+        </li>
+    </ul>
+</body>
+<script type="application/javascript">
+    /*
+     * 事件类型
+     *   文档加载完成事件：
+     *       1.onload事件在window对象或者img对象上进行触发。当网页所有内容都加载完成后
+     *       则会触发window的onload事件。图片加载完成之后也会触发图片的onload事件。
+     *       2.其实在图片和异步的脚步加载完成之前。只要dom文档加载完成后就可以执行js的相关
+     *       的dom操作、没必要等图x片加载完成。
+     *       优化：
+     *           DOMContentLoaded事件是DOM文档加载完成后就会触发(ff最开始，IE9支持)
+     *           纳入HTML5标准
+     *           Jquery内部的document.ready就是如此实现的
+     *       3.onunload事件和onload相反
+     *       4.onbeforeunload事件：当网页刷新或关闭之前。
+     *       window.onload=function(){}//可以在任何地方写，因为页面加载完成
+     *
+     *   窗口的事件:
+     *       1.onresize事件
+     *           当窗口大小发生改变的时候触发
+     *           由于某些浏览器实现的是改变一个像素就会触发一次。所以一次调整过程中，事件
+     *           可能重复触发多次，所以不要做大量计算的代码，火狐是在改变大小结束后触发一次
+     *       2.onscroll事件
+     *           当窗口发生滚动的时候，会导致此事件发生。
+     *           获取窗口的滚动的x和y方向的值：pageXOffset和pageYOffset,但是IE浏览器不支持
+     *           需要其他方式代替
+     *           兼容处理：
+     *               var supportPageOffset=window.pageXOffset!==undefined;
+     *               var isCSS1Compat=((document.compatMode||'')==='CSS1Compat');
+     *               var x=supportPageOffset?window.pageXOffset:isCSS1Compat?
+     *                                       document.documentElement.scrollLeft:document.body.scrollLeft;
+     *               var y=supportPageOffset?window.pageYOffset:isCSS1Compat?
+     *                                       document.documentElement.scrollTop:document.body.scrollTop;
+     *          其他的滚动监听值获取：
+     *              document.body.clientHeight:可以获取body的高度(要有HTML的标准头部)
+     *              document.documentElement.clientHeight:获取视口的高度(所有浏览器都兼容)
+     *              获取滚动的高度(距离)：
+     *              document.documentElement.scrollTop||document.body.scrollTop
+     *                      ie/ff                           chrome
+     *
+     * */
+
+
+    //窗口所有元素都加载完成之后，ajax除外
+    //    window.onload=function(){
+    //        var btn=document.getElementById('btn');
+    //        btn.onclick=function(){
+    //            alert(this);
+    //        }
+    //    }
+
+    //下面的应该放到head中测试
+    //优化window.onload事件：DOMContentLoaded
+    //首先兼容 IE9以上支持文档document加载完成之后
+    //        document.addEventListener('DOMContentLoaded',function(e){
+    //            //按钮绑定事件
+    //            var btn=document.getElementById('clickMe');
+    //            btn.addEventListener('click',function(){
+    //                alert(123);
+    //            },false)
+    //        },false)
+    //兼容IE8
+    //        document.onreadystatechange=function(e){
+    //            console.log(document.readyState);
+    //            if(document.readyState=='complete'){
+    //                var btn=document.getElementById('clickMe');
+    //                btn.addEventListener('click',function(){
+    //                    alert(123);
+    //                },false)
+    //            }
+    //        }
+    //封装以上的不兼容方法：(其实就是jQuery的document.ready的原理)
+//    document.myReady = function (callback) {
+//        if (document.addEventListener) {
+//            document.addEventListener('DOMContentLoaded', callback, false);
+//        } else if (document.attachEvent) {
+//            document.attachEvent('onreadystatechange', function () {
+//                if (document.readyState == 'interactive') {
+//                    callback(window.event);
+//                }
+//            })
+//        } else {//其他特殊情况
+//            window.onload = callback;
+//        }
+//    }
+//    document.myReady(function (e) {//传入了一个匿名函数
+//        //注册事件
+//        var btn = document.getElementById('clickMe');
+//        btn.onclick = function () {
+//            alert(153);
+//        }
+//    })
+
+
+    //onresize事件
+    //    window.onresize=function(){
+    //        console.log('fd');
+    //    }
+
+    //onscroll事件
+//    window.onscroll = function (e) {
+////        console.log('111');
+////        console.log(window.pageXOffset);//IE8不支持的
+////        console.log(window.pageYOffset);
+//
+//        //兼容性注意IE的不同，但是谷歌也可以
+//        console.log(document.documentElement.scrollTop);
+////        document.documentElement也就相当于document他自己,就是html标签对象
+////        console.dir(document.documentElement)
+//        //标准浏览器的使用，例如谷歌也可以
+//        console.log(document.body.scrollTop);
+//        //综合起来
+//        console.log(document.body.scrollTop||document.documentElement.scrollTop);
+//    }
+
+
+    //滚动案例1 实现当页面加载到底部的时候，自动加载新内容(用动态标签替代)
+//    window.onload=function(){
+//        window.onscroll=function(){
+//            //拿到滚动距离
+//            var scrollH=document.documentElement.scrollTop||document.body.scrollTop;
+//            //整个网页的高度
+//            var pageH=document.body.clientHeight;
+//            //获取视口高度
+//            var viewportH=document.documentElement.clientHeight;
+//            //底部剩余的高度为 = 整个网页的高度-滚动距离-视口高度
+//            var bottomH=pageH-scrollH-viewportH;
+//            if(bottomH<50){
+//                var list=document.getElementById('list');
+//                var tempStr='';
+//                for(var i=0;i<10;i++){
+//                    tempStr+='<li>'+new Date()+'<li>';
+//                }
+//                list.innerHTML+=tempStr;
+//            }
+//        }
+//    }
+    //滚动案例2 实现hao123滚动某位置进行固定定位
+    window.onload=function(){
+        window.onscroll=function(){
+                //当页面滚动到150px
+            var nav=document.getElementById('nav');
+            var scrollH=document.documentElement.scrollTop||document.body.scrollTop;
+            if(scrollH>=150){
+                nav.className='fixed';
+            }else{
+                nav.className='';
+            }
+
+        }
+    }
+</script>
+</html>

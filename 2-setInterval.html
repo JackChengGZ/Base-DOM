@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Jack的标题跑马灯效果</title>
+</head>
+<body>
+
+</body>
+<script type="application/javascript">
+
+    //window.setInterval
+    //两个参数：1.一个函数(或是代码段) 2.毫秒数
+//    setInterval(function(){
+//        console.log(new Date());
+//    },1000);
+//    setInterval("console.log(new Date());",2000);//相当于eval()
+
+
+
+    //window.setTimeOut();只执行一次
+//    setTimeout(function(){
+//        console.log('hi Jack');
+//    },5000)
+
+
+
+    //window.clearInterval();//清除定时器
+//    var t=setInterval(function(){//返回给t的是一个id
+//        console.log(new Date());
+//    },1000);
+//    setTimeout(function(){
+//        console.log(t);//其实这个t就是一个索引
+//        //停止上面的时钟
+//        clearInterval(t);//停止间断循环执行的setInterVal
+//    },5000);
+
+
+    //标题跑马灯案例
+//    console.log(document.title);
+    //第一种方式
+//    setInterval(function(){
+//        //每隔0.5s把title的最后一个文字放到前面
+//        //使用字符数组的办法，数组有pop方法 unshift方法
+//        //把字符串转为数组
+//        var charArray=document.title.split("");
+//        var lastChar=charArray.pop();
+//        charArray.unshift(lastChar);
+//        document.title=charArray.join("");
+//    },500);
+
+    //第二种方法
+    setInterval(function(){
+        var oldTitle=document.title;
+        //slice方法的两个参数，1.截取字符串起始位置。2.第二个参数是结束位置。
+        var lastChar=oldTitle.slice(oldTitle.length-1);
+        var beforeStr=oldTitle.slice(0,oldTitle.length-1);
+        document.title=lastChar+beforeStr;
+    },500);
+</script>
+</html>

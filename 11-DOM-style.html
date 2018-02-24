@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        #test{
+            width:500px;
+            height:300px;
+            background-color:#CCC;
+            float:left;
+        }
+    </style>
+</head>
+<body>
+    <div id="box"></div>
+
+
+    <div id = "test"></div>
+    <div id = "tag" style = "width:500px; height:300px;background-color:pink;"></div>
+</body>
+<script type="application/javascript">
+    /*
+    * 元素样式操作
+    *  1.内联样式
+    *    .Element.style属性可以获得元素的内联样式。并且style中已经把所有的样式都做了处理，可以直接
+    *    处理访问各个样式规则。
+    *    .不能直接对Element.style做赋值处理。但是可以对它的属性做处理
+    *    .Element.style.cssText可以直接设置内联样式的文本
+    *    .Element.className可以设置内联的样式类
+    *    .也可以通过Element的setAttribute来进行设置样式的属性值。
+    *  2.样式表操作
+    *    .自己扩展搜索：dom操作样式表。很少用到，了解即可
+    *
+    *
+    *  3.CSS的样式分为三类：
+         内嵌样式：是写在Tag里面的，内嵌样式只对所有的Tag有效。
+         内部样式：是写在HTML的里面的，内部样式只对所在的网页有效。
+         外部样式表：如果很多网页需要用到同样的样式(Styles)，将样式(Styles)写在一个以.css为后缀的CSS文件里，然后在每个需要用到这 些样式(Styles)的网页里引用这个CSS文件。
+
+         getComputedStyle是一个可以获取当前元素所有最终使用的CSS属性值。返回的是一个CSS样式对象([object CSSStyleDeclaration])  getComputedStyle(obj,null).paddingLeft
+         currentStyle是IE浏览器 ,作为DOM元素属性存在的，返回的是CSS样式对象 obj.currentStyle.paddingLeft
+
+         style 只能获取行间样式，但能设置样式。
+         getComputedStyle 和 currentStyle 能够获取 行间样式/非行间样式/浏览器默认样式，但存在浏览器兼容问题，且不能设置样式。
+
+         element指JS获取的DOM对象
+         element.style //只能获取内嵌样式
+         element.currentStyle //IE浏览器获取非内嵌样式
+         window.getComputedStyle(element,伪类) //非IE浏览器获取非内嵌样式
+         document.defaultView.getComputedStyle(element,伪类)//非IE浏览器获取非内嵌样式
+         注：Gecko 2.0 (Firefox 4 / Thunderbird 3.3 / SeaMonkey 2.1) 之前，第二个参数“伪类”是必需的（如果不是伪类，设置为null），现在可以省略这个参数。
+    *
+    *
+    * */
+    document.getElementById('box').style.cssText='width:100px;height:100px;border:1px solid #000';
+    document.getElementById('box').setAttribute('style','width:100px;height:100px;border:1px solid #000;background:red');
+
+
+
+    window.onload = function(){
+        var test = document.getElementById("test");
+        var tag = document.getElementById("tag");
+
+        //CSS样式对象:CSS2Properties{},CSSStyleDeclaration
+        console.log(test.style); //火狐返回空对象CSS2Properties{}，谷歌返回空对象CSSStyleDeclaration{}
+        console.log(tag.style); //返回CSS2Properties{width:"500px",height:"300px",background-color:"pink"}
+        //element.style获取的是内嵌式的style，如果不是内嵌式，则是一个空对象
+
+        console.log(tag.style.backgroundColor);//pink
+        console.log(tag.style['background-color']);//pink
+        //获取类似background-color,border-radius,padding-left类似样式的两种写法啊
+
+        //console.log(test.currentStyle) //火狐和谷歌为Undefined,IE返回CSS对象
+        console.log(window.getComputedStyle(test,null))//谷歌返回CSSStyleDeclaration{……} ，火狐返回CSS2Properties{……}
+        console.log(window.getComputedStyle(test))
+        //效果同上,但是在Gecko 2.0 (Firefox 4/Thunderbird 3.3/SeaMonkey 2.1) 之前,第二个参数“伪类”是必需的(如果不是伪类,设置为null)
+
+        //console.log(test.currentStyle.width);//500px(IE)
+        console.log(window.getComputedStyle(test).width); //500px;
+        console.log(window.getComputedStyle(test)['width']);//500px;
+        //document.defaultView.getComputedStyle(element,null)[attr]/window.getComputedStyle(element,null)[attr]
+    }
+
+
+    //封装兼容性
+    function getStyle(element, attr){
+        if(element.currentStyle){//IE
+            return element.currentStyle[attr];
+        }else{//标准浏览器
+            return window.getComputedStyle(element,null)[attr];
+        }
+    }
+    console.log(getStyle(test,"cssFloat"));//left
+    console.log(getStyle(test,"float"));    //left,早前FF和chrome需要使用cssFloat，不过现在已经不必
+    console.log(getStyle(test,"stylefloat"));//火狐和谷歌都是undefined
+    console.log(getStyle(test,"styleFloat")); //IE9以下必须使用styleFloat，IE9及以上,支持styleFloat和cssFloat
+    console.log(window.getComputedStyle(test).getPropertyValue("float"));
+
+    /*
+     IE9及其它浏览器（getPropertyValue）
+     window.getComputedStyle(element, null).getPropertyValue(“float”);
+     element.currentStyle.getPropertyValue(“float”);
+     getPropertyValue不支持驼峰写法。(兼容IE9及以上，FF,Chrom，Safari,Opera)
+     如：window.getComputedStyle(element,null).getPropertyValue(“background-color”);
+
+     对于IE6~8，需要使用getAttribute方法，用于访问CSS样式对象的属性。
+     element.currentStyle.getAttribute(“float”);//不再需要写成styleFloat
+     element.currentStyle.getAttribute(“backgroundColor”);//属性名需要写成驼峰写法，否则IE6不支持，如果无视IE6，可以写成”background-color”
+    * */
+</script>
+</html>

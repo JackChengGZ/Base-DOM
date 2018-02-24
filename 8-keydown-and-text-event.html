@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<!--键盘事件-->
+<input type="text" id="txt"/>
+<br/>
+<br/>
+<div id="wrap">
+    <div id="box">
+        <input type="text" id="txt1"/>
+        <input type="text" id="txt2"/>
+        <input type="text" id="txt3"/>
+    </div>
+    <input type="button" id="btn" value="提交"/>
+</div>
+
+<br/>
+用户名：<input type="text" id="txtName"/>
+<input type="button" id="btn2" value="提交"/>
+</body>
+<script type="application/javascript">
+    /*
+    * 键盘事件
+    *   keydown(一般这种):用户在按下某键时候发生。一直按着就会不断的触发，并触发默认行为
+    *   keypress:用户按下一个按键，并产生一个字符时发生(也就是不管类似shift、alt、ctrl之类
+    *   的键，就是说用户安了一个能在屏幕上输出字符的按键keypress事件才会触发)。一直按着就会不断的触发
+    *   keyup:用户释放一个按键的时候触发
+    *   事件触发顺序：keydown ->keypress->keyup
+    *   keydown和keyup都是通过事件对象的keyCode获取按下键的字符编码。keypress是通过
+    *   事件对象的charCode来获取按下的键的字符(ie8可以通过keyCode获取)。
+    *   键盘事件的对象中也包含shiftKey、ctrlKey、altKey和metaKey属性
+    *   键盘分为：可以打印的字符键和不可打印的功能键。常用功能键：Esc、Tab、Caps Lock、
+    *   Shift、Ctrl、Alt、Enter、Backspace....
+    *   change事件，input、textarea、select可以出发change事件。焦点离开文本框才会触发
+    * */
+    //键盘事件
+//    (function(){
+//        window.onload=function(){
+//            //进行绑定事件
+//            var txt=document.getElementById('txt');
+//            txt.onkeydown=function(e){//keydown可以应用于所有的dom对象 还有功能键 ctrl...
+//                e=e||window.event;
+//                console.log('keydown====> keyCode: '+ e.keyCode+'charCode: '+ e.charCode);
+//
+//            }
+//            txt.onkeypress=function(e){//keypress是区分按下的大小写字符的
+//                e=e||window.event;
+//                console.log('keypress====> keyCode: '+ e.keyCode+'charCode: '+ e.charCode);
+//
+//            }
+//            txt.onkeyup=function(e){//跟keydown一样，不区分大小写，按下的一律按照大写字母的编码
+//                e=e||window.event;
+//                console.log('keyup====> keyCode: '+ e.keyCode+'charCode: '+ e.charCode);
+//
+//            }
+//        }
+//    })();
+
+    //键盘文本事件
+//    (function(){
+//        window.onload=function(){
+//            //获取所有的input 绑定keyup事件
+//           var inputList=document.querySelectorAll('#wrap #box input');
+////            console.log(inputList);
+//            for(let i=0;i<inputList.length;i++){
+//                inputList[i].onkeyup=function(e){
+////                    检测文本的字符数
+//                    if(this.value.length>=3){
+//                        if(i<=1){
+//                            inputList[i+1].focus();
+//                        }else{
+//                            document.getElementById('wrap').getElementsByTagName('input')[i+1].focus();
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//    })();
+
+
+    //文本框的change事件
+    (function(){
+        window.onload=function(){
+            var txtName=document.getElementById('txtName');
+            txtName.onchange=function(){
+                //判断一下文本框内容是否为6-8
+                if(this.value.length>8||this.value.length<6){
+                    alert('用户名要6-8位');
+                    this.focus();
+                }
+            }
+        }
+    })();
+</script>
+</html>

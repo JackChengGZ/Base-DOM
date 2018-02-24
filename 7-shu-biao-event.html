@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <style type="text/css">
+        *{
+            padding: 0;
+            margin: 0;
+        }
+        img{
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        #wrap{
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            background: lightblue;
+            cursor: move;
+            display: none;
+        }
+        ul.menu{
+            list-style: none;
+            border: 1px solid #000;
+            background: #eee;
+            display: none;
+            /*定位之后会触发BFC*/
+            position: absolute;
+        }
+        .menu .jack-item{
+
+            border: 1px solid #000;
+            cursor: pointer;
+            padding: 5px;
+        }
+        .menu .jack-item:hover{
+            background: mediumaquamarine;
+
+        }
+        .pBox p{
+           cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="box" class="box">
+        <p>hello Jack</p>
+        <p>hello Jack</p>
+        <p>hello Jack</p>
+        <p>hello Jack</p>
+        <p>hello Jack</p>
+        <p>hello Jack</p>
+    </div>
+    <!--拖动图片-->
+    <img src="7-timg.gif" alt="" width="100" title="小蝴蝶飞呀飞"/>
+
+    <!--拖动div-->
+    <div id="wrap" style="left:20px;top: 10px;">
+    </div>
+
+    <!--右击弹出菜单-->
+    <h1 id="hTitle">我是Jack,右击查看</h1>
+    <ul class="menu" id="menuList">
+        <li class="jack-item">Jack1</li>
+        <li class="jack-item">Jack2</li>
+        <li class="jack-item">Jack3</li>
+        <li class="jack-item">Jack4</li>
+        <li class="jack-item">Jack5</li>
+    </ul>
+
+    <div class="pBox" id="pBox">
+        <p>我是段落1</p>
+
+        <p>我是段落2</p>
+
+        <p>我是段落3</p>
+
+        <p>我是段落4</p>
+
+        <p>我是段落5</p>
+    </div>
+
+</body>
+<script type="application/javascript">
+    /*
+    * 鼠标事件
+    * .click事件(单机)，可以通过回车键触发
+    * .dbclick事件(双击)
+    * .mousedown:按下鼠标键的时候触发，不能通过键盘触发
+    * .mouseup:用户释放鼠标的时候触发。不能通过键盘触发
+    * .mouseenter:首次进入元素范围触发，不冒泡
+    * .mouseover:当鼠标在元素上面或者子元素上的时候触发，会冒泡
+    * .mouseleave:当鼠标离开目标元素的时候，不冒泡
+    * .mouseout:当鼠标离开目标元素的时候或者子元素触发，会冒泡(不常用)
+    * .mousemove:鼠标在元素内部移动时候重复触发此事件(重点)
+    *
+    *
+    * 鼠标事件对象(接口)
+    *   .鼠标事件中对应的事件对象都是MouseEvent对象
+    *   .MouseEvent继承自UIEvent.UIEvent继承自Event(事件对象)
+    *   .UIEvent就是增加了pageX和pageY属性(相对于body的坐标)。而MouseEvent又覆盖了pageX和pageY属性
+    *   .鼠标事件对象包括：鼠标按键信息、键盘配合鼠标的信息、鼠标的位置信息等，这是主要的三大信息。
+    *
+    * 鼠标事件对象的坐标位置：
+    *   .客户区坐标(视口内的坐标)
+    *       clientX:视口内横坐标，从视口最左边开始计算
+    *       clientY:视口内的纵坐标
+    *   .页面坐标
+    *       在没有页面滚动时候，clientX和pageX相同。IE8不支持pageX
+    *       pageX就是鼠标点击位置相对于整个文档页面的水平坐标。
+    *       pageY是鼠标点击位置相对于整个文档(包括不可视区域)的纵坐标
+    *       pageX=event.clientX+(document.documentElement.scrollLeft||document.body.scrollLeft);IE8以下
+    *       pageY=event.clientY+(document.documentElement.scrollTop||document.body.scrollTop);IE8以下
+    *   .屏幕坐标
+    *       鼠标点击的时候，通过screenX和screenY来对应鼠标在屏幕的坐标。
+    *   .offsetX和offsetY是相对事件源对象的内边距内侧的距离
+    *
+    *
+    * 鼠标事件对象的鼠标按钮信息
+    *   event.button(mousedown事件中使用)
+    *   标准的DOM模型中，按下鼠标后，事件对象event中button属性可能有三个值：
+    *   0主键(左键)，1中键(滚轮)，2(鼠标右键)
+    *   IE的模型和DOM的标准不一致：总共有0-7种情况
+    *   注意：click是拿不到这些信息的
+    *
+    *
+    * 鼠标事件对象的键盘信息
+    *   .altLeft:布尔类型  是否按下了左边的alt键。altKey也为true
+    *   .ctrlLeft:布尔类型  是否按下了左侧的ctrl键
+    *   .shiftLeft:布尔类型
+    *
+    *
+    * */
+    //鼠标的事件类型
+//    ;(function(){
+//        window.onload=function(){
+////            debugger;//断点调试
+//            var box=document.getElementById('box');
+//            box.onmousedown=function(){
+//                console.log('mousedown')
+//            }
+//            box.onmouseup=function(){
+//                console.log('onmouseup')
+//            }
+//            box.onclick=function(){
+//                console.log('onclick')
+//            }
+//            box.onmouseenter=function(){
+//                console.log('enter');//只会触发一次
+//            }
+//            box.onmouseleave=function(){
+//                console.log('leave');//只会触发一次
+//            }
+//            box.onmouseover=function(){
+//                console.log('over');//会冒泡 over会在enter之前触发
+//            }
+//            box.onmouseout=function(e){
+//                console.log('out');//离开父元素或自身时候 一般不用
+////                console.dir(e)
+//            }
+//        }
+//    })();
+
+
+    //案例 蝴蝶跟着鼠标飞的案例
+//    ;(function(){
+//        window.onload=function(){
+//            //给整个文档添加一个onmousemove  采用DOM0级别
+//            document.onmousemove=function(e){//鼠标的e:MouseEvent,事件对象
+//                e=e||window.event;
+//                //获取鼠标移动的位置所在的整个页面的坐标
+////                var pageX= e.pageX;//只支持高版本浏览器
+//                //兼容低版本
+//                var pageX= e.clientX+(document.documentElement.scrollLeft||document.body.scrollLeft);
+//                var pageY= e.clientY+(document.documentElement.scrollTop||document.body.scrollTop);
+//                //给固定图片设置left top
+//                var img=document.querySelector('img');
+//                img.style.left=(pageX-50)+'px';
+//                img.style.top=(pageY-50)+'px';
+//                console.log(11);
+//            }
+//        }
+//    })();
+
+    //案例 拖动div
+    //在这里需要监听mousedown事件 mouseup事件 mousemove事件
+//    (function(){
+//        var isMove=false;
+//        var box=document.getElementById('wrap');
+//        var tempX,tempY=0;
+//        box.onmousedown=function(e){
+//            isMove=true;
+//            e=e||window.event;
+//            //获取鼠标点下的位置
+//            tempX=e.clientX+(document.documentElement.scrollLeft||document.body.scrollLeft);
+//            tempY=e.clientY+(document.documentElement.scrollTop||document.body.scrollTop);
+////            console.log(tempX);
+////            console.log(tempY);
+//        }
+//        box.onmouseup=function(){
+//            isMove=false;
+//        }
+//        document.onmousemove=function(e){
+//            if(!isMove){
+//               return ;
+//            }
+//                //计算移动鼠标并获得当前的位置，最好是使用pageX  pageY
+//                e=e||window.event;
+//                var pageX= e.clientX+(document.documentElement.scrollLeft||document.body.scrollLeft);
+//                var pageY= e.clientY+(document.documentElement.scrollTop||document.body.scrollTop);
+////            console.log(pageX);
+////            console.log(pageY);
+//                //鼠标 移动距离
+//                var xH=pageX-tempX;
+//                var yH=pageY-tempY;
+//                //设置div的位置  一开始如果没有通过js设置style.left和style.top,那么值都为空字符串
+//                // js是拿不到css中的值，只能拿到行内样式
+////            console.log(box.style.left);
+////            console.log(box.style.top);
+//                box.style.left=parseFloat(box.style.left)+xH+'px';
+//                box.style.top=parseFloat(box.style.top)+yH+'px';
+//
+//                tempX=pageX;
+//                tempY=pageY;
+//        }
+//    })();
+
+
+//    //案例  右键弹出自定义菜单
+//    (function(){
+//        window.onload=function(){
+//            //给h1标签添加一个右键点击的事件。
+//            var hTitle=document.getElementById('hTitle');
+//            var menuList=document.getElementById('menuList');
+//            hTitle.onmousedown=function(e){
+//                e=e||window.event;
+//                if(e.button==2|| e.button==6){
+////                    console.log('右键点击了')
+////                    console.log(menuList.style.display);//这个值是获取不道德，因为行内没有设置，只能给他设置
+//                    menuList.style.display='block';
+//                    //获取鼠标位置
+//                    var pageX= e.clientX+(document.documentElement.scrollLeft||document.body.scrollLeft);
+//                    var pageY= e.clientY+(document.documentElement.scrollTop||document.body.scrollTop);
+////                    console.log(pageX);
+//                    menuList.style.left=pageX+'px';
+//                    menuList.style.top=pageY+'px';
+//                }
+//            };
+//            //点击文档其他地方关闭menuList
+//            document.onclick=function(){
+//                menuList.style.display='none';
+//            }
+//
+//            //屏蔽默认点击浏览器的右键菜单
+//            document.oncontextmenu=function(e){
+//                //阻止右击默认行为
+//                e=e|| window.event;
+//                if(e.preventDefault){
+//                    e.preventDefault();
+//                }else{
+//                    e.returnValue=false;
+//                }
+//                return false;
+//            }
+//        };
+//
+//    })();
+
+
+    //案例 鼠标事件对象绑定键盘
+    (function(){
+        window.onload=function(){
+            //首先拿到所有的p标签
+            var pList=document.querySelectorAll('#pBox p');
+//            console.log(pList);
+            for(var i=0;i<pList.length;i++){
+                pList[i].onclick=pClickHandler;
+//                console.log(i);//这里没有保留i,是因为i不需要被用到，跟tab切换不一样
+            }
+        }
+        function pClickHandler(e){
+            e=e||window.event;
+            if(e.ctrlKey){
+                //多选
+                this.style.backgroundColor='silver';
+            }else{
+                //单选
+                var pList=document.querySelectorAll('#pBox p');
+                for(var j=0;j<pList.length;j++){
+                    pList[j].style.backgroundColor='#fff'
+                }
+                this.style.backgroundColor='silver';
+            }
+        }
+     })();
+</script>
+</html>
